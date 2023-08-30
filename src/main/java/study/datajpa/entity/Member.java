@@ -3,6 +3,7 @@ package study.datajpa.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -16,6 +17,10 @@ public class Member {
     private Long id;
     private String username;
     private int age;
+
+    private String email;
+    private LocalDateTime createdAt; // 생성된 시간
+    private LocalDateTime updatedAt; // 업데이트된 시간
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
