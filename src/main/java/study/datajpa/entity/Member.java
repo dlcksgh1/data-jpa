@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "username", "age"})
+@NamedQuery(name = "Member.findByUsername2",
+            query = "select m from Member m where m.username =:username")
 public class Member {
 
     @Id
@@ -19,8 +21,8 @@ public class Member {
     private int age;
 
     private String email;
-    private LocalDateTime createdAt; // 생성된 시간
-    private LocalDateTime updatedAt; // 업데이트된 시간
+    //private LocalDateTime createdAt; // 생성된 시간
+    //private LocalDateTime updatedAt; // 업데이트된 시간
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")

@@ -1,6 +1,8 @@
 package study.datajpa.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import study.datajpa.entity.Member;
 
 import java.time.LocalDateTime;
@@ -26,8 +28,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByUsernameOrEmail(String username, String email);
 
     //예시 After, Before, GreaterThan, LessThan, Between
-    List<Member> findByCreateAtAfter (LocalDateTime lastDay); //(lastDay 미포함)
-    List<Member> findByCreateAtBefore (LocalDateTime lastDay); //(lastDay 미포함)
+    //List<Member> findByCreateAtAfter (LocalDateTime lastDay); //(lastDay 미포함)
+    //List<Member> findByCreateAtBefore (LocalDateTime lastDay); //(lastDay 미포함)
     List<Member> findByIdGreaterThan( Long id); // (id 미포함)
     List<Member> findByIdGreaterThanEqual( Long id); // (id 포함)
     List<Member> findByIdLessThanEqual( Long id); // (id 포함)
@@ -35,7 +37,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     //예시 is(Not)Empty, is(Not)Null
     List<Member> findByIdIsNotNull();
-    List<Member> findByIdIsNotEmpty();
+    // NotEmpty는 String과 같은 문자열이 비어있는지 체크가 아닌 Collection type의 변수가 not empty(비어있는지)를 체크한다.
+    // List<Member> findByAddressIsNotEmpty(); 지금은 Address 없어서 주석
 
     // 예시 In
     List<Member> findByUsernameIn(List<String> username);
@@ -49,4 +52,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 예시 Sorting
     List<Member> findByUsernameOrderByIdDesc(String username);
     List<Member> findByUsernameOrderByIdDescEmailAsc(String username);
+
+    @Query(name = "Member.findByUsername2") // 생략가능 메서드 이름만으로 Named 쿼리를 호출할 수 있다.
+    List<Member> findByUsername2(@Param("username") String username);
 }
