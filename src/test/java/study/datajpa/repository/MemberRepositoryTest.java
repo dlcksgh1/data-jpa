@@ -197,4 +197,11 @@ public class MemberRepositoryTest {
         em.flush(); //Update Query 실행 X
 
     }
+
+    @Test
+    public void findMemberCustom() {
+
+        List<Member> result = memberRepository.findMemberCustom();
+
+    }
 }
