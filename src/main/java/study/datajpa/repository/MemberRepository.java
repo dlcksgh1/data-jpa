@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
+import study.datajpa.dto.MemberProjectionDto;
 import study.datajpa.entity.Member;
 
 import javax.persistence.QueryHint;
@@ -106,4 +107,13 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     @QueryHints(value = { @QueryHint(name = "org.hibernate.readOnly", value = "true")}, forCounting = true)
     Page<Member> findByUsername(String name, Pageable pageable);
+
+    //메서드 이름은 자유, 반환 타입으로 인지
+    List<UsernameOnly> findProjectionsByUsername(String username);
+
+    List<MemberProjectionDto> findMemberProjectionsDtoByUsername(String username);
+
+    <T> List<T> findProjectionsByUsername(String username, Class<T> type);
+
+    List<NestedClosedProjection> findNestedClosedProjectionByUsername(String NestedClosedProjection);
 }

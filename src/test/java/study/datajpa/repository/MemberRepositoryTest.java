@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
+import study.datajpa.dto.MemberProjectionDto;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
 
@@ -221,6 +222,74 @@ public class MemberRepositoryTest {
         //when
         Specification<Member> spec = MemberSpec.username("m1").and(MemberSpec.teamName("teamA"));
         List<Member> result = memberRepository.findAll(spec);
+
+        //then
+        Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void projections() throws Exception {
+
+        //given
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        em.persist(m1);
+        em.persist(m2);
+        em.flush();
+        em.clear();
+
+        //when
+        List<UsernameOnly> result = memberRepository.findProjectionsByUsername("m1");
+
+        //then
+        Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+
+
+    @Test
+    public void projectionsDto() throws Exception {
+
+        //given
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        em.persist(m1);
+        em.persist(m2);
+        em.flush();
+        em.clear();
+
+        //when
+        List<MemberProjectionDto> result = memberRepository.findMemberProjectionsDtoByUsername("m1");
+
+        List<MemberProjectionDto> result2 = memberRepository.findProjectionsByUsername("m1",
+                MemberProjectionDto.class);
+
+        List<UsernameOnly> result3 = memberRepository.findProjectionsByUsername("m1",
+                UsernameOnly.class);
+
+        //then
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        System.out.println(result.get(0).getTeam().getName());
+    }
+
+    @Test
+    public void NestedClosedProjection() throws Exception {
+
+        //given
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        em.persist(m1);
+        em.persist(m2);
+        em.flush();
+        em.clear();
+
+        //when
+        List<NestedClosedProjection> result = memberRepository.findNestedClosedProjectionByUsername("m1");
 
         //then
         Assertions.assertThat(result.size()).isEqualTo(1);
